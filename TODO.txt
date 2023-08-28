@@ -1,0 +1,21 @@
+
+
+- - - - - - - - - - TODO:
+
+- - - - - - - - - - MuSCW:
+
+- - - - - Must have:
+- Combine the buttons.
+- Add a few inputs I THINK is needed so I can show it off to mom and Twig
+- A placeholder for now, but it need the GDPR "what will we use this info for". IE, the danish terrorist register and our anonymized statistics
+
+- - - - - Should have:
+- Fix the functionality so it ADDS to the CSV file, instead of making new ones
+
+- - - - - Could have
+
+- The names of the columns as the first row (Maybe not, since its only function might be to make it more of a bother to combine the data)
+
+
+
+- - - - - Wont have
