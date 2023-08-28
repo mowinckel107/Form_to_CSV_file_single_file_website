@@ -1,13 +1,18 @@
-const nameInput = document.getElementById('nameInput');
+
 const downloadButton = document.getElementById('downloadButton');
+const saveButton = document.getElementById('saveButton');
+
+const deleteButton = document.getElementById('deleteButton'); // ONLY FOR TESTING
 
 
-let allInputs = [];
 
 
-downloadButton.addEventListener('click', () => {
+const localStorageKey = "localStorageKey";
+
+saveButton.addEventListener('click', () => {
 
     let singleInput = [];
+
 
 
     const newFirstName = firstNameInput.value.trim();
@@ -28,10 +33,31 @@ downloadButton.addEventListener('click', () => {
 
 
     const aEntry = singleInput.join(',') + '\n';
-    allInputs.push(aEntry)
 
 
-    const csvContent = "data:text/csv;charset=utf-8," + allInputs;
+
+    
+
+    
+    let allEntries = localStorage.getItem(localStorageKey);
+
+    if(allEntries === null)
+    {
+        allEntries = "";
+    }
+
+    allEntries = allEntries + aEntry; // add new entry
+    localStorage.setItem(localStorageKey, allEntries) // save
+});
+
+
+downloadButton.addEventListener('click', () => {
+
+
+    let allEntries = localStorage.getItem(localStorageKey);
+
+
+    const csvContent = "data:text/csv;charset=utf-8," + allEntries;
     const encodedUri = encodeURI(csvContent);
 
     const link = document.createElement("a"); // TODO try to remove. I think it is not needed
@@ -44,3 +70,10 @@ downloadButton.addEventListener('click', () => {
     link.click();
 
 });
+
+
+
+deleteButton.addEventListener('click', () => {
+    localStorage.removeItem(localStorageKey);
+});
+
