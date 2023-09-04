@@ -1,71 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
 
+    <!-- CSS from here: ---------------------------------------------------------------------------------------------------------------------------------- -->
+
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.container {
+    text-align: left;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>Campsite registration</title>
 
 </head>
-
-<!--
-        <button id="downloadButton">Download</button>
-        <button id="deleteButton">DELETE LOCAL STORAGE</button>
-        <br>
-        <br>
--->
 
 
 <body>
 
 
-
     <div class="container">
 
-        <!-- PLACE BUTTONS HERE -->
-        <button id="downloadButton">Download</button>
-        <button id="deleteButton">DELETE LOCAL STORAGE</button>
-        <br>
-        <br>
 
 
-        <h1>Campsite registration</h1>
 
-        First and middle names:
-        &nbsp
-        <input type="text" id="firstNameInput" placeholder="First and middle names">
-        <br>
+            <h1>Campsite registration</h1>
+
+            <!-- Buttens style set to nothing, so they are not generated at the start -->
 
 
-        Last names:
-        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-        &nbsp
-        <input type="text" id="lastNameInput" placeholder="Last names">
-        <br>
+            <table>
+                <tr> 
+                    <td> <button id="downloadButton" style="display: none;">Download CSV file</button> </td>
+                    <td> <button id="deleteButton" style="display: none;">Delete local storage</button> </td>
+                </tr>
 
+                <tr>
+                    <td>First and middle names:</td>
+                    <td><input type="text" id="FirstNameInput" placeholder="First and middle names"></td>
+                </tr>
 
-        Country of origin:
-        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-        <input type="text" id="countryInput" placeholder="Country of origin">
-        <br>
+                <tr>
+                    <td>Last names:</td>
+                    <td><input type="text" id="LastNameInput" placeholder="Last names"></td>
+                </tr>
 
-        <br>
-        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-        &nbsp
-        <button id="saveButton">Save</button>
+                <tr>
+                    <td>Street name and number:</td>
+                    <td><input type="text" id="StreetInput" placeholder="Street name and number"></td>
+                </tr>
+
+                <tr>
+                    <td>Zipcode:</td>
+                    <td><input type="text" id="ZipcodeInput" placeholder="Zipcode"></td>
+                </tr>
+
+                <tr>
+                    <td>Town:</td>
+                    <td><input type="text" id="TownInput" placeholder="Town"></td>
+                </tr>
+
+                <tr>
+                    <td>Nationality:</td>
+                    <td><input type="text" id="NationalityInput" placeholder="Nationality"></td>
+                </tr>
+
+                <tr>
+                    <td>Number of Adults:</td>
+                    <td><input type="text" id="AdultsInput" placeholder="Number of Adults"></td>
+                </tr>
+
+                <tr>
+                    <td>Number of Children:</td>
+                    <td><input type="text" id="ChildrenInput" placeholder="Number of Children"></td>
+                </tr>
+
+                <tr>
+                    <td><button id="saveButton">Save</button></td>
+                </tr>
+
+            </table>
 
 
         <h5> TODO: information required by GDPR about what we will use this info for </h5>
 
     </div>
 
-    <script src="script.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Javascript from here:  ---------------------------------------------------------------------------------------------------------------------------------- -->
+
+    <script>
+        // Get the elements we need to add event listeners to
+        const saveButton = document.getElementById('saveButton');
+
+        const firstNameInput = document.getElementById('FirstNameInput');
+        const downloadButton = document.getElementById('downloadButton');
+        const deleteButton = document.getElementById('deleteButton');
+
+
+
+        const localStorageKey = "localStorageKey";
+
+
+        // Everytime the text changes in the first textbox, check if the secret word have been typed
+        firstNameInput.addEventListener('input', (event) => {
+        if(FirstNameInput.value.trim().toUpperCase() === "EXCEL")
+        {
+            // Set style.display value to block.
+            // For other values to set it to, see https://www.w3schools.com/jsref/prop_style_display.asp
+            downloadButton.style.display = 'block';
+            deleteButton.style.display = 'block';
+        }
+        else
+        {
+            downloadButton.style.display = 'none';
+            deleteButton.style.display = 'none';
+        }
+
+        });
+
+
+        saveButton.addEventListener('click', () => {
+
+            // Take all text input and put them into an array, and reset the inputs
+            let singleInput = [];
+
+            singleInput.push( FirstNameInput.value.trim() );
+            FirstNameInput.value = '';
+
+            singleInput.push( LastNameInput.value.trim() );
+            LastNameInput.value = '';
+
+            singleInput.push( StreetInput.value.trim() );
+            StreetInput.value = '';
+
+            singleInput.push( ZipcodeInput.value.trim() + " " + TownInput.value.trim() );
+            TownInput.value = '';
+            ZipcodeInput.value = '';
+
+            singleInput.push( NationalityInput.value.trim() );
+            NationalityInput.value = '';
+
+            singleInput.push( AdultsInput.value.trim() );
+            AdultsInput.value = '';
+
+            singleInput.push( ChildrenInput.value.trim() );
+            ChildrenInput.value = '';
+
+            // Make a giant string of all values in the array, seperated by commas and ending with a newline (IE, be a CVS string)
+            const aEntry = singleInput.join(',') + '\n';
+
+
+
+            let allEntries = localStorage.getItem(localStorageKey);
+
+            if(allEntries === null)
+            {
+                allEntries = "";
+            }
+
+            allEntries = allEntries + aEntry; // add entry
+            localStorage.setItem(localStorageKey, allEntries) // save
+
+
+
+
+
+        });
+
+
+        downloadButton.addEventListener('click', () => {
+
+
+            let allEntries = localStorage.getItem(localStorageKey);
+
+
+            const csvContent = "data:text/csv;charset=utf-8," + allEntries;
+            const encodedUri = encodeURI(csvContent);
+
+            const link = document.createElement("a"); // TODO try to remove. I think it is not needed
+
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Campsite_Registrations.csv");
+
+            document.body.appendChild(link);
+
+            link.click();
+
+        });
+
+
+
+        deleteButton.addEventListener('click', () => {
+            localStorage.removeItem(localStorageKey);
+            FirstNameInput.value = '';
+            downloadButton.style.display = 'none';
+            deleteButton.style.display = 'none';
+        });
+
+    </script>
+
+
+
 </body>
 
 
