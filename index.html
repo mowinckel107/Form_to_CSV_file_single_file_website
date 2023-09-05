@@ -85,30 +85,6 @@ button {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -120,6 +96,9 @@ button {
 <body>
 
 
+<!-- HTML (The M part) from here:  ---------------------------------------------------------------------------------------------------------------------------------- -->
+
+
     <div class="container">
             <!-- Popup window, hidden at the start -->
             <div id="PopupWindow" class="popupWindow" > 
@@ -129,8 +108,6 @@ button {
                     <button id="ClosePupupWindowButton">Ok</button>
                 </div>
             </div>
-
-
 
 
             <h1>Campsite registration</h1>
@@ -146,42 +123,48 @@ button {
                     <td>First and middle names:</td>
                     <td><input type="text" id="FirstNameInput" placeholder="First and middle names"></td>
                     <td> <p id="FirstNameInputHelpText"> </td>
-                    
                 </tr>
 
                 <tr>
                     <td>Last names:</td>
                     <td><input type="text" id="LastNameInput" placeholder="Last names"></td>
+                    <td> <p id="LastNameInputHelpText"> </td>
                 </tr>
 
                 <tr>
                     <td>Street name and number:</td>
                     <td><input type="text" id="StreetInput" placeholder="Street name and number"></td>
+                    <td> <p id="StreetInputHelpText"> </td>
                 </tr>
 
                 <tr>
                     <td>Zipcode:</td>
                     <td><input type="text" id="ZipcodeInput" placeholder="Zipcode"></td>
+                    <td> <p id="ZipcodeInputHelpText"> </td>
                 </tr>
 
                 <tr>
                     <td>Town:</td>
                     <td><input type="text" id="TownInput" placeholder="Town"></td>
+                    <td> <p id="TownInputHelpText"> </td>
                 </tr>
 
                 <tr>
                     <td>Nationality:</td>
                     <td><input type="text" id="NationalityInput" placeholder="Nationality"></td>
+                    <td> <p id="NationalityInputHelpText"> </td>
                 </tr>
 
                 <tr>
                     <td>Number of Adults:</td>
                     <td><input type="text" id="AdultsInput" placeholder="Number of Adults"></td>
+                    <td> <p id="AdultsInputHelpText"> </td>
                 </tr>
 
                 <tr>
                     <td>Number of Children:</td>
                     <td><input type="text" id="ChildrenInput" placeholder="Number of Children"></td>
+                    <td> <p id="ChildrenInputHelpText"> </td>
                 </tr>
 
                 <tr>
@@ -197,33 +180,13 @@ button {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <!-- Javascript from here:  ---------------------------------------------------------------------------------------------------------------------------------- -->
 
     <script>
 
         const localStorageKey = "localStorageKey";
 
+        // - - - - - - - - - - All event listeners:
 
         // Everytime the text changes in the first textbox, check if the secret word have been typed
         FirstNameInput.addEventListener('input', (event) => {
@@ -251,25 +214,230 @@ button {
 
             let someUserInputAreWrong = false;
 
-            // Have all the input checked
+
+
+            // - - - - - Have all the input checked
+            // Check the inputs from least to most General, since only last error text will apear
+
+            // - FirstNameInput
+            // Must not contain numbers
             if( containsNumber( FirstNameInput.value.trim() ) )
             {
-                FirstNameInput.classList.add("input-Error"); // TODO where to remove again/do we remove again?
-                FirstNameInputHelpText.innerHTML = " <- Names may not contain numbers";
-                return;
+                FirstNameInput.classList.add("input-Error");
+                FirstNameInputHelpText.innerHTML = " <- May not contain numbers";
+                someUserInputAreWrong = true;
             }
+
+            // Must not be empty
+            else if( FirstNameInput.value.trim() === "" )
+            {
+                FirstNameInput.classList.add("input-Error");
+                FirstNameInputHelpText.innerHTML = " <- Must be filled out";
+                someUserInputAreWrong = true;
+            }
+
             else
-            {   everyUserInputAreOk = true;
+            {
                 FirstNameInput.classList.remove("input-Error");
                 FirstNameInputHelpText.innerHTML = "";
             }
-            
 
 
 
 
 
-            if(everyUserInputIsOk)
+            // - LastNameInput
+            // Must not contain numbers
+            if( containsNumber( LastNameInput.value.trim() ) )
+            {
+                LastNameInput.classList.add("input-Error");
+                LastNameInputHelpText.innerHTML = " <- May not contain numbers";
+                someUserInputAreWrong = true;
+            }
+
+            // Must not be empty
+            else if( LastNameInput.value.trim() === "")
+            {
+                LastNameInput.classList.add("input-Error");
+                LastNameInputHelpText.innerHTML = " <- Must be filled out";
+                someUserInputAreWrong = true;
+            }
+
+            else
+            {
+                LastNameInput.classList.remove("input-Error");
+                LastNameInputHelpText.innerHTML = "";
+            }
+
+
+
+
+
+            // - StreetInput
+            // Must not be empty
+            if( StreetInput.value.trim() === "")
+            {
+                StreetInput.classList.add("input-Error");
+                StreetInputHelpText.innerHTML = " <- Must be filled out";
+                someUserInputAreWrong = true;
+            }
+            else
+            {
+                StreetInput.classList.remove("input-Error");
+                StreetInputHelpText.innerHTML = "";
+            }
+
+
+
+
+
+            // - ZipcodeInput
+            // Must contain numbers
+            if( containsNumber( ZipcodeInput.value.trim() ) === false )
+            {
+                ZipcodeInput.classList.add("input-Error");
+                ZipcodeInputHelpText.innerHTML = " <- Must contain numbers";
+                someUserInputAreWrong = true;
+            }
+
+            // Must not be empty
+            else if( ZipcodeInput.value.trim() === "")
+            {
+                ZipcodeInput.classList.add("input-Error");
+                ZipcodeInputHelpText.innerHTML = " <- Must be filled out";
+                someUserInputAreWrong = true;
+            }
+            else
+            {
+                ZipcodeInput.classList.remove("input-Error");
+                ZipcodeInputHelpText.innerHTML = "";
+            }
+
+
+
+
+
+            // - TownInput
+            // Must not contain numbers
+            if( containsNumber( TownInput.value.trim() ) )
+            {
+                TownInput.classList.add("input-Error");
+                TownInputHelpText.innerHTML = " <- May not contain numbers";
+                someUserInputAreWrong = true;
+            }
+
+            // Must not be empty
+            else if( TownInput.value.trim() === "")
+            {
+                TownInput.classList.add("input-Error");
+                TownInputHelpText.innerHTML = " <- Must be filled out";
+                someUserInputAreWrong = true;
+            }
+            else
+            {
+                TownInput.classList.remove("input-Error");
+                TownInputHelpText.innerHTML = "";
+            }
+
+
+
+
+
+            // - NationalityInput
+            // Must not contain numbers
+            if( containsNumber( NationalityInput.value.trim() ) )
+            {
+                NationalityInput.classList.add("input-Error");
+                NationalityInputHelpText.innerHTML = " <- May not contain numbers";
+                someUserInputAreWrong = true;
+            }
+
+            // Must not be empty
+            else if( NationalityInput.value.trim() === "")
+            {
+                NationalityInput.classList.add("input-Error");
+                NationalityInputHelpText.innerHTML = " <- Must be filled out";
+                someUserInputAreWrong = true;
+            }
+            else
+            {
+                NationalityInput.classList.remove("input-Error");
+                NationalityInputHelpText.innerHTML = "";
+            }
+
+
+
+            var temp = parseInt( AdultsInput.value.trim() );
+
+            // - AdultsInput
+            // Must be a number between 0 and 500
+            if( parseInt( AdultsInput.value.trim() ) < 0 || parseInt( AdultsInput.value.trim() ) > 500)
+            {
+                AdultsInput.classList.add("input-Error");
+                AdultsInputHelpText.innerHTML = " <- Must be a number between 0 and 500";
+                someUserInputAreWrong = true;
+            }
+
+            // Must only contain numbers
+            else if( containsOnlyNumbers( AdultsInput.value.trim() ) === false )
+            {
+                AdultsInput.classList.add("input-Error");
+                AdultsInputHelpText.innerHTML = " <- Must only contain numbers";
+                someUserInputAreWrong = true;
+            }
+
+            // Must not be empty
+            else if( AdultsInput.value.trim() === "")
+            {
+                AdultsInput.classList.add("input-Error");
+                AdultsInputHelpText.innerHTML = " <- Must be filled out";
+                someUserInputAreWrong = true;
+            }
+            else
+            {
+                AdultsInput.classList.remove("input-Error");
+                AdultsInputHelpText.innerHTML = "";
+            }
+
+
+
+
+
+            // - ChildrenInput
+            // Must be a number between 0 and 500
+            if( parseInt( ChildrenInput.value.trim() ) < 0 || parseInt( ChildrenInput.value.trim() ) > 500)
+            {
+                ChildrenInput.classList.add("input-Error");
+                ChildrenInputHelpText.innerHTML = " <- Must be a number between 0 and 500";
+                someUserInputAreWrong = true;
+            }
+
+            // Must only contain numbers
+            else if( containsOnlyNumbers( ChildrenInput.value.trim() ) === false )
+            {
+                ChildrenInput.classList.add("input-Error");
+                ChildrenInputHelpText.innerHTML = " <- Must only contain numbers";
+                someUserInputAreWrong = true;
+            }
+
+            // Must not be empty
+            else if( ChildrenInput.value.trim() === "")
+            {
+                ChildrenInput.classList.add("input-Error");
+                ChildrenInputHelpText.innerHTML = " <- Must be filled out";
+                someUserInputAreWrong = true;
+            }
+            else
+            {
+                ChildrenInput.classList.remove("input-Error");
+                ChildrenInputHelpText.innerHTML = "";
+            }
+
+
+
+
+
+            if(someUserInputAreWrong)
             {
                 // return without saving the inputs
                 return;
@@ -287,7 +455,7 @@ button {
             const aEntry = singleInput.join(',') + '\n';
 
 
-            // Get the handler to the local storage for 
+            // Get the handler to the local storage
             let allEntries = localStorage.getItem(localStorageKey);
 
             if(allEntries === null)
@@ -351,8 +519,17 @@ button {
         });
 
 
+        // - - - - - - - - - - All helper functions:
+
+
+
+
         function containsNumber(myString) {
             return /\d/.test(myString);
+        }
+
+        function containsOnlyNumbers(myString) {
+            return /^\d+$/.test(myString);
         }
 
     </script>
