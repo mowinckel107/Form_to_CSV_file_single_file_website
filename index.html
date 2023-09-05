@@ -5,6 +5,7 @@
 
 <style>
 
+ /* Replacing default types, like body and input*/ 
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -14,14 +15,6 @@ body {
     align-items: center;
     min-height: 100vh;
     background-color: #f5f5f5;
-}
-
-.container {
-    text-align: left;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 input[type="text"] {
@@ -40,6 +33,52 @@ button {
     color: white;
     cursor: pointer;
 }
+
+ /* Defining a type of class, thus it needs to start with "." */ 
+.container {
+    text-align: left;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.popupWindow {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.popupWindow-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1rem 1.5rem;
+    width: 24rem;
+    border-radius: 0.5rem;
+}
+
+.show-popupWindow {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.input-Error {
+    background-color: #f75252;
+}
+
+
 </style>
 
 
@@ -82,24 +121,32 @@ button {
 
 
     <div class="container">
+            <!-- Popup window, hidden at the start -->
+            <div id="PopupWindow" class="popupWindow" > 
+
+                <div class = "popupWindow-content">   <!-- TODO, combine the two div classes if possible -->
+                    <p>Your entry have been registered</p>
+                    <button id="ClosePupupWindowButton">Ok</button>
+                </div>
+            </div>
 
 
 
 
             <h1>Campsite registration</h1>
 
-            <!-- Buttens style set to nothing, so they are not generated at the start -->
-
-
             <table>
                 <tr> 
-                    <td> <button id="downloadButton" style="display: none;">Download CSV file</button> </td>
-                    <td> <button id="deleteButton" style="display: none;">Delete local storage</button> </td>
+                    <!-- Buttens style set to nothing, so they are not generated at the start -->
+                    <td> <button id="DownloadButton" style="display: none;">Download CSV file</button> </td>
+                    <td> <button id="DeleteButton" style="display: none;">Delete local storage</button> </td>
                 </tr>
 
                 <tr>
                     <td>First and middle names:</td>
                     <td><input type="text" id="FirstNameInput" placeholder="First and middle names"></td>
+                    <td> <p id="FirstNameInputHelpText"> </td>
+                    
                 </tr>
 
                 <tr>
@@ -138,7 +185,7 @@ button {
                 </tr>
 
                 <tr>
-                    <td><button id="saveButton">Save</button></td>
+                    <td><button id="SaveButton">Save</button></td>
                 </tr>
 
             </table>
@@ -174,68 +221,73 @@ button {
     <!-- Javascript from here:  ---------------------------------------------------------------------------------------------------------------------------------- -->
 
     <script>
-        // Get the elements we need to add event listeners to
-        const saveButton = document.getElementById('saveButton');
-
-        const firstNameInput = document.getElementById('FirstNameInput');
-        const downloadButton = document.getElementById('downloadButton');
-        const deleteButton = document.getElementById('deleteButton');
-
-
 
         const localStorageKey = "localStorageKey";
 
 
         // Everytime the text changes in the first textbox, check if the secret word have been typed
-        firstNameInput.addEventListener('input', (event) => {
+        FirstNameInput.addEventListener('input', (event) => {
         if(FirstNameInput.value.trim().toUpperCase() === "EXCEL")
         {
             // Set style.display value to block.
             // For other values to set it to, see https://www.w3schools.com/jsref/prop_style_display.asp
-            downloadButton.style.display = 'block';
-            deleteButton.style.display = 'block';
+            DownloadButton.style.display = 'block';
+            DeleteButton.style.display = 'block';
         }
         else
         {
-            downloadButton.style.display = 'none';
-            deleteButton.style.display = 'none';
+            DownloadButton.style.display = 'none';
+            DeleteButton.style.display = 'none';
         }
 
         });
 
 
-        saveButton.addEventListener('click', () => {
+        SaveButton.addEventListener('click', () => {
 
-            // Take all text input and put them into an array, and reset the inputs
+            // Take all text input and put them into an array in the order
+            // we want it to apear in the CVS file
             let singleInput = [];
 
+            let someUserInputAreWrong = false;
+
+            // Have all the input checked
+            if( containsNumber( FirstNameInput.value.trim() ) )
+            {
+                FirstNameInput.classList.add("input-Error"); // TODO where to remove again/do we remove again?
+                FirstNameInputHelpText.innerHTML = " <- Names may not contain numbers";
+                return;
+            }
+            else
+            {   everyUserInputAreOk = true;
+                FirstNameInput.classList.remove("input-Error");
+                FirstNameInputHelpText.innerHTML = "";
+            }
+            
+
+
+
+
+
+            if(everyUserInputIsOk)
+            {
+                // return without saving the inputs
+                return;
+            }
+
             singleInput.push( FirstNameInput.value.trim() );
-            FirstNameInput.value = '';
-
             singleInput.push( LastNameInput.value.trim() );
-            LastNameInput.value = '';
-
             singleInput.push( StreetInput.value.trim() );
-            StreetInput.value = '';
-
             singleInput.push( ZipcodeInput.value.trim() + " " + TownInput.value.trim() );
-            TownInput.value = '';
-            ZipcodeInput.value = '';
-
             singleInput.push( NationalityInput.value.trim() );
-            NationalityInput.value = '';
-
             singleInput.push( AdultsInput.value.trim() );
-            AdultsInput.value = '';
-
             singleInput.push( ChildrenInput.value.trim() );
-            ChildrenInput.value = '';
 
             // Make a giant string of all values in the array, seperated by commas and ending with a newline (IE, be a CVS string)
             const aEntry = singleInput.join(',') + '\n';
 
 
-
+            // Get the handler to the local storage for 
             let allEntries = localStorage.getItem(localStorageKey);
 
             if(allEntries === null)
@@ -246,14 +298,12 @@ button {
             allEntries = allEntries + aEntry; // add entry
             localStorage.setItem(localStorageKey, allEntries) // save
 
-
-
-
+            PopupWindow.classList.add("show-popupWindow");
 
         });
 
 
-        downloadButton.addEventListener('click', () => {
+        DownloadButton.addEventListener('click', () => {
 
 
             let allEntries = localStorage.getItem(localStorageKey);
@@ -275,12 +325,35 @@ button {
 
 
 
-        deleteButton.addEventListener('click', () => {
+        DeleteButton.addEventListener('click', () => {
             localStorage.removeItem(localStorageKey);
             FirstNameInput.value = '';
-            downloadButton.style.display = 'none';
-            deleteButton.style.display = 'none';
+            DownloadButton.style.display = 'none';
+            DeleteButton.style.display = 'none';
         });
+
+
+        ClosePupupWindowButton.addEventListener('click', () => {
+
+            // Clear the current text in the input fields, so it is ready for next entry
+            FirstNameInput.value = '';
+            LastNameInput.value = '';
+            StreetInput.value = '';
+            TownInput.value = '';
+            ZipcodeInput.value = '';
+            NationalityInput.value = '';
+            AdultsInput.value = '';
+            ChildrenInput.value = '';
+
+            PopupWindow.classList.remove("show-popupWindow");
+
+
+        });
+
+
+        function containsNumber(myString) {
+            return /\d/.test(myString);
+        }
 
     </script>
 
