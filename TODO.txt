@@ -1,6 +1,28 @@
 
+Rune Krøvel-Velle
+Randy Soper
+Erik Mowinckel 
+Mikael Anneroth
+Paul Knutson
+Ansgar Koene
+Inger Annie Moe 
+Javier Poveda Figueroa
+Jordi Domingo-Pascual
+Mikhail Takmakov
+Teemu Viljamäki 
+Ali Hessami
+Yaroslav Gosudarkin
+
+
+
+
+
+
 
 - - - - - - - - - - TODO:
+
+- Everything must be in 3 different languages.
+For german write down every sentence I need a translation for.
 
 - - - - - - - - - - MuSCW:
 
@@ -8,22 +30,12 @@
 
 - - - - - Must have:
 
-- The real inputs
-
-- The GDPR "what will we use this info for". IE, the danish terrorist register and our anonymized statistics
-
-
 
 - - - - - Should have:
 
 
 
 - - - - - Could have
-
-- The names of the columns as the first row (Maybe not, since its only function might be to make it more of a bother to combine the data)
-
-- IF this needs to be run on a tablet it should all be one .html file
-
 
 
 - - - - - Wont have

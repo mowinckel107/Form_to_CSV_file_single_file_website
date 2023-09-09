@@ -110,7 +110,7 @@ button {
             </div>
 
 
-            <h1>Campsite registration</h1>
+            <h1>Campingplads registrering / Campsite registration</h1>
 
             <table>
                 <tr> 
@@ -120,49 +120,80 @@ button {
                 </tr>
 
                 <tr>
-                    <td>First and middle names:</td>
+                    <td>
+                        Overnattede du på autocamper-pladsen? /<br>
+                        Did you stay in the Stellplatz?
+                    </td>
+                    <td> <input type="checkbox" id="CamperCheckbox"> </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Fornavne og mellemnavne: /
+                        First and middle names:
+                    </td>
                     <td><input type="text" id="FirstNameInput" placeholder="First and middle names"></td>
                     <td> <p id="FirstNameInputHelpText"> </td>
                 </tr>
 
                 <tr>
-                    <td>Last names:</td>
+                    <td>
+                        Efternavne: /
+                        Last names:
+                    </td>
                     <td><input type="text" id="LastNameInput" placeholder="Last names"></td>
                     <td> <p id="LastNameInputHelpText"> </td>
                 </tr>
 
                 <tr>
-                    <td>Street name and number:</td>
+                    <td>Vejnavn og nummer /
+                        Street name and number:
+                    </td>
                     <td><input type="text" id="StreetInput" placeholder="Street name and number"></td>
                     <td> <p id="StreetInputHelpText"> </td>
                 </tr>
 
                 <tr>
-                    <td>Zipcode:</td>
+                    <td>
+                        Spostnummer /
+                        Zipcode:
+                    </td>
                     <td><input type="text" id="ZipcodeInput" placeholder="Zipcode"></td>
                     <td> <p id="ZipcodeInputHelpText"> </td>
                 </tr>
 
                 <tr>
-                    <td>Town:</td>
+                    <td>
+                        By /
+                        Town:
+                    </td>
                     <td><input type="text" id="TownInput" placeholder="Town"></td>
                     <td> <p id="TownInputHelpText"> </td>
                 </tr>
 
                 <tr>
-                    <td>Nationality:</td>
+                    <td>
+                        Nationalitet /
+                        Nationality:
+                    </td>
                     <td><input type="text" id="NationalityInput" placeholder="Nationality"></td>
                     <td> <p id="NationalityInputHelpText"> </td>
                 </tr>
 
                 <tr>
-                    <td>Number of Adults:</td>
+                    <td>
+                        Antal voksne: /
+                        Number of adults:
+                    </td>
                     <td><input type="text" id="AdultsInput" placeholder="Number of Adults"></td>
                     <td> <p id="AdultsInputHelpText"> </td>
                 </tr>
 
                 <tr>
-                    <td>Number of Children:</td>
+                    <td>
+                        Antal Børn: /
+                        Number of Children:
+                    </td>
                     <td><input type="text" id="ChildrenInput" placeholder="Number of Children"></td>
                     <td> <p id="ChildrenInputHelpText"> </td>
                 </tr>
@@ -174,7 +205,20 @@ button {
             </table>
 
 
-        <h5> TODO: information required by GDPR about what we will use this info for </h5>
+        <h5>
+            Informationen er samlet og gemt i 5 år for at overholde dansk lovgigning. Efter de 5 år bliver den slettet. <br>
+            Informationen bliver også anonymiseret og brugt til statistik. <br>
+            Med mindre det danske politi anmoder om informatonen forlader den ikke Skærbæk Familie Camping <br>
+
+            <br>
+
+            All the information is collected and stored for 5 years to comply with Danish law. <br>
+            After the 5 years, it is deleted. The information is also anonymized and used for statistics. <br>
+            Unless the Danish police requsts information, it never leaves Skærbæk Familie Camping. <br>
+
+            <br>
+
+        </h5>
 
     </div>
 
@@ -184,7 +228,7 @@ button {
 
     <script>
 
-        const localStorageKey = "localStorageKey";
+        var localStorageKey = "localStorageKeyForNormalCampsite";
 
         // - - - - - - - - - - All event listeners:
 
@@ -205,6 +249,18 @@ button {
 
         });
 
+        var CamperCheckboxIsChecked = false;
+        CamperCheckbox.addEventListener('change', () => {
+            if (CamperCheckbox.checked)
+            {
+                localStorageKey = "localStorageKeyForStellplatz";
+            }
+            else
+            {
+                localStorageKey = "localStorageKeyForNormalCampsite";
+            }
+
+        });
 
         SaveButton.addEventListener('click', () => {
 
@@ -217,25 +273,24 @@ button {
 
 
             // - - - - - Have all the input checked
-            // Check the inputs from least to most General, since only last error text will apear
+            // Check the inputs from most General to least, since only first error text will apear
 
             // - FirstNameInput
+            var firstNameInput = FirstNameInput.value.trim()
+            // Must not be empty
+            if( firstNameInput === "" )
+            {
+                FirstNameInput.classList.add("input-Error");
+                FirstNameInputHelpText.innerHTML = " <- Must be filled out";
+                someUserInputAreWrong = true;
+            }            
             // Must not contain numbers
-            if( containsNumber( FirstNameInput.value.trim() ) )
+            else if( containsNumber( firstNameInput ) )
             {
                 FirstNameInput.classList.add("input-Error");
                 FirstNameInputHelpText.innerHTML = " <- May not contain numbers";
                 someUserInputAreWrong = true;
             }
-
-            // Must not be empty
-            else if( FirstNameInput.value.trim() === "" )
-            {
-                FirstNameInput.classList.add("input-Error");
-                FirstNameInputHelpText.innerHTML = " <- Must be filled out";
-                someUserInputAreWrong = true;
-            }
-
             else
             {
                 FirstNameInput.classList.remove("input-Error");
@@ -247,22 +302,21 @@ button {
 
 
             // - LastNameInput
-            // Must not contain numbers
-            if( containsNumber( LastNameInput.value.trim() ) )
-            {
-                LastNameInput.classList.add("input-Error");
-                LastNameInputHelpText.innerHTML = " <- May not contain numbers";
-                someUserInputAreWrong = true;
-            }
-
+            var lastNameInput = LastNameInput.value.trim()
             // Must not be empty
-            else if( LastNameInput.value.trim() === "")
+            if( lastNameInput === "")
             {
                 LastNameInput.classList.add("input-Error");
                 LastNameInputHelpText.innerHTML = " <- Must be filled out";
                 someUserInputAreWrong = true;
             }
-
+            // Must not contain numbers
+            else if( containsNumber( lastNameInput ) )
+            {
+                LastNameInput.classList.add("input-Error");
+                LastNameInputHelpText.innerHTML = " <- May not contain numbers";
+                someUserInputAreWrong = true;
+            }
             else
             {
                 LastNameInput.classList.remove("input-Error");
@@ -274,8 +328,9 @@ button {
 
 
             // - StreetInput
+            var streetInput = StreetInput.value.trim()
             // Must not be empty
-            if( StreetInput.value.trim() === "")
+            if( streetInput === "")
             {
                 StreetInput.classList.add("input-Error");
                 StreetInputHelpText.innerHTML = " <- Must be filled out";
@@ -292,19 +347,19 @@ button {
 
 
             // - ZipcodeInput
-            // Must contain numbers
-            if( containsNumber( ZipcodeInput.value.trim() ) === false )
-            {
-                ZipcodeInput.classList.add("input-Error");
-                ZipcodeInputHelpText.innerHTML = " <- Must contain numbers";
-                someUserInputAreWrong = true;
-            }
-
+            var zipcodeInput = ZipcodeInput.value.trim()
             // Must not be empty
-            else if( ZipcodeInput.value.trim() === "")
+            if( zipcodeInput === "")
             {
                 ZipcodeInput.classList.add("input-Error");
                 ZipcodeInputHelpText.innerHTML = " <- Must be filled out";
+                someUserInputAreWrong = true;
+            }
+            // Must contain numbers
+            else if( containsNumber( zipcodeInput ) === false )
+            {
+                ZipcodeInput.classList.add("input-Error");
+                ZipcodeInputHelpText.innerHTML = " <- Must contain numbers";
                 someUserInputAreWrong = true;
             }
             else
@@ -318,19 +373,19 @@ button {
 
 
             // - TownInput
-            // Must not contain numbers
-            if( containsNumber( TownInput.value.trim() ) )
-            {
-                TownInput.classList.add("input-Error");
-                TownInputHelpText.innerHTML = " <- May not contain numbers";
-                someUserInputAreWrong = true;
-            }
-
+            var townInput = TownInput.value.trim()
             // Must not be empty
-            else if( TownInput.value.trim() === "")
+            if( townInput === "")
             {
                 TownInput.classList.add("input-Error");
                 TownInputHelpText.innerHTML = " <- Must be filled out";
+                someUserInputAreWrong = true;
+            }
+            // Must not contain numbers
+            else if( containsNumber( townInput ) )
+            {
+                TownInput.classList.add("input-Error");
+                TownInputHelpText.innerHTML = " <- May not contain numbers";
                 someUserInputAreWrong = true;
             }
             else
@@ -344,19 +399,19 @@ button {
 
 
             // - NationalityInput
-            // Must not contain numbers
-            if( containsNumber( NationalityInput.value.trim() ) )
-            {
-                NationalityInput.classList.add("input-Error");
-                NationalityInputHelpText.innerHTML = " <- May not contain numbers";
-                someUserInputAreWrong = true;
-            }
-
+            var nationalityInput = NationalityInput.value.trim()
             // Must not be empty
-            else if( NationalityInput.value.trim() === "")
+            if( nationalityInput === "")
             {
                 NationalityInput.classList.add("input-Error");
                 NationalityInputHelpText.innerHTML = " <- Must be filled out";
+                someUserInputAreWrong = true;
+            }
+            // Must not contain numbers
+            else if( containsNumber( nationalityInput ) )
+            {
+                NationalityInput.classList.add("input-Error");
+                NationalityInputHelpText.innerHTML = " <- May not contain numbers";
                 someUserInputAreWrong = true;
             }
             else
@@ -367,30 +422,29 @@ button {
 
 
 
-            var temp = parseInt( AdultsInput.value.trim() );
 
+            
             // - AdultsInput
-            // Must be a number between 0 and 500
-            if( parseInt( AdultsInput.value.trim() ) < 0 || parseInt( AdultsInput.value.trim() ) > 500)
+            var adultsInput = AdultsInput.value.trim()
+            // Must not be empty
+            if( adultsInput === "")
             {
                 AdultsInput.classList.add("input-Error");
-                AdultsInputHelpText.innerHTML = " <- Must be a number between 0 and 500";
+                AdultsInputHelpText.innerHTML = " <- Must be filled out";
                 someUserInputAreWrong = true;
             }
-
             // Must only contain numbers
-            else if( containsOnlyNumbers( AdultsInput.value.trim() ) === false )
+            else if( containsOnlyNumbers( adultsInput ) === false )
             {
                 AdultsInput.classList.add("input-Error");
                 AdultsInputHelpText.innerHTML = " <- Must only contain numbers";
                 someUserInputAreWrong = true;
             }
-
-            // Must not be empty
-            else if( AdultsInput.value.trim() === "")
+            // Must be a number between 0 and 500
+            else if( parseInt( adultsInput ) < 0 || parseInt( adultsInput ) > 500)
             {
                 AdultsInput.classList.add("input-Error");
-                AdultsInputHelpText.innerHTML = " <- Must be filled out";
+                AdultsInputHelpText.innerHTML = " <- Must be a number between 0 and 500";
                 someUserInputAreWrong = true;
             }
             else
@@ -404,27 +458,27 @@ button {
 
 
             // - ChildrenInput
+            var childrenInput = ChildrenInput.value.trim();
             // Must be a number between 0 and 500
-            if( parseInt( ChildrenInput.value.trim() ) < 0 || parseInt( ChildrenInput.value.trim() ) > 500)
+
+            // Must not be empty
+            if( childrenInput === "")
             {
                 ChildrenInput.classList.add("input-Error");
-                ChildrenInputHelpText.innerHTML = " <- Must be a number between 0 and 500";
+                ChildrenInputHelpText.innerHTML = " <- Must be filled out";
                 someUserInputAreWrong = true;
             }
-
             // Must only contain numbers
-            else if( containsOnlyNumbers( ChildrenInput.value.trim() ) === false )
+            else if( containsOnlyNumbers( childrenInput ) === false )
             {
                 ChildrenInput.classList.add("input-Error");
                 ChildrenInputHelpText.innerHTML = " <- Must only contain numbers";
                 someUserInputAreWrong = true;
             }
-
-            // Must not be empty
-            else if( ChildrenInput.value.trim() === "")
+            else if( parseInt( childrenInput ) < 0 || parseInt( childrenInput ) > 500)
             {
                 ChildrenInput.classList.add("input-Error");
-                ChildrenInputHelpText.innerHTML = " <- Must be filled out";
+                ChildrenInputHelpText.innerHTML = " <- Must be a number between 0 and 500";
                 someUserInputAreWrong = true;
             }
             else
@@ -443,13 +497,49 @@ button {
                 return;
             }
 
-            singleInput.push( FirstNameInput.value.trim() );
-            singleInput.push( LastNameInput.value.trim() );
-            singleInput.push( StreetInput.value.trim() );
-            singleInput.push( ZipcodeInput.value.trim() + " " + TownInput.value.trim() );
-            singleInput.push( NationalityInput.value.trim() );
-            singleInput.push( AdultsInput.value.trim() );
-            singleInput.push( ChildrenInput.value.trim() );
+
+
+
+
+            // Alternatives in how nationalities is written.
+            // If possible, they should be DK, D or EN
+            if
+            (
+                nationalityInput.toUpperCase === "DANSK" ||
+                nationalityInput.toUpperCase === "DANMARK" ||
+                nationalityInput.toUpperCase === "DKK"
+            )
+            {
+                nationalityInput = "DK";
+            }
+            else if
+            (
+                nationalityInput.toUpperCase === "ENGLISH" ||
+                nationalityInput.toUpperCase === "ENG"
+            )
+            {
+                nationalityInput = "EN";
+            }
+            else if
+            (
+                nationalityInput.toUpperCase === "DEUTSCH" ||
+                nationalityInput.toUpperCase === "DEUTSCHLAND"
+            )
+            {
+                nationalityInput = "D";
+            }
+
+
+            // All inputs are now in the format we want to save them as.
+            // We put them all in an array.
+            singleInput.push( firstNameInput );
+            singleInput.push( lastNameInput );
+            singleInput.push( streetInput );
+            singleInput.push( zipcodeInput + " " + townInput );
+            singleInput.push( nationalityInput );
+            singleInput.push( adultsInput );
+            singleInput.push( childrenInput );
+
 
             // Make a giant string of all values in the array, seperated by commas and ending with a newline (IE, be a CVS string)
             const aEntry = singleInput.join(',') + '\n';
@@ -474,13 +564,13 @@ button {
         DownloadButton.addEventListener('click', () => {
 
 
-            let allEntries = localStorage.getItem(localStorageKey);
+            var allEntries = localStorage.getItem("localStorageKeyForNormalCampsite");
 
 
-            const csvContent = "data:text/csv;charset=utf-8," + allEntries;
-            const encodedUri = encodeURI(csvContent);
+            var csvContent = "data:text/csv;charset=utf-8," + allEntries;
+            var encodedUri = encodeURI(csvContent);
 
-            const link = document.createElement("a"); // TODO try to remove. I think it is not needed
+            var link = document.createElement("a"); // TODO try to remove. I think it is not needed
 
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "Campsite_Registrations.csv");
@@ -488,6 +578,28 @@ button {
             document.body.appendChild(link);
 
             link.click();
+
+
+
+
+
+            allEntries = localStorage.getItem("localStorageKeyForStellplatz");
+
+
+            csvContent = "data:text/csv;charset=utf-8," + allEntries;
+            encodedUri = encodeURI(csvContent);
+
+            link = document.createElement("a"); // TODO try to remove. I think it is not needed
+
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Stellplatz_Registrations.csv");
+
+            document.body.appendChild(link);
+
+            link.click();
+
+
+
 
         });
 
