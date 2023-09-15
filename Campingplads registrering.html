@@ -505,19 +505,19 @@ button {
             // If possible, they should be DK, D or EN
             if
             (
-                nationalityInput.toUpperCase === "DANSK" ||
-                nationalityInput.toUpperCase === "DANMARK" ||
-                nationalityInput.toUpperCase === "DKK"
+                nationalityInput.toUpperCase() === "DANSK" ||
+                nationalityInput.toUpperCase() === "DANMARK" ||
+                nationalityInput.toUpperCase() === "DKK"
             )
             {
                 nationalityInput = "DK";
             }
             else if
             (
-                nationalityInput.toUpperCase === "ENGLISH" ||
-                nationalityInput.toUpperCase === "BRITISH" ||
-                nationalityInput.toUpperCase === "SCOTTISH" ||
-                nationalityInput.toUpperCase === "ENG"
+                nationalityInput.toUpperCase() === "ENGLISH" ||
+                nationalityInput.toUpperCase() === "BRITISH" ||
+                nationalityInput.toUpperCase() === "SCOTTISH" ||
+                nationalityInput.toUpperCase() === "ENG"
 
             )
             {
@@ -525,8 +525,8 @@ button {
             }
             else if
             (
-                nationalityInput.toUpperCase === "DEUTSCH" ||
-                nationalityInput.toUpperCase === "DEUTSCHLAND"
+                nationalityInput.toUpperCase() === "DEUTSCH" ||
+                nationalityInput.toUpperCase() === "DEUTSCHLAND"
             )
             {
                 nationalityInput = "D";
